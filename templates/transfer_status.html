@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Transfer Status</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Transferring: {{ playlist_name }}</h1>
+        <ul>
+            {% for track in tracks %}
+                <li>{{ track['name'] }} by {{ ", ".join(track['artists']) }}</li>
+            {% endfor %}
+        </ul>
+        <form method="POST">
+            <button type="submit" class="btn">Start Transfer</button>
+        </form>
+    </div>
+</body>
+</html>

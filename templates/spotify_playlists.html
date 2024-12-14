@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Playlists</title>
+</head>
+<body>
+    <h1>Select a Spotify Playlist</h1>
+    <form method="POST">
+        <ul>
+            <!-- Iterate through playlists and display them -->
+            {% for idx, details in playlists.items() %}
+                <li>
+                    <label>
+                        <input type="radio" name="playlist_number" value="{{ idx }}">
+                        {{ details['name'] }}
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="submit" class="btn">Transfer Playlist</button>
+    </form>
+</body>
+</html>
