@@ -6,22 +6,21 @@ import platform
 # Spotify API credentials
 SPOTIFY_CLIENT_ID = '770c44471ebe4c33828d0386301a5d70'
 SPOTIFY_CLIENT_SECRET = '1e75e0fed7a643cfadd422c4960bdc75'
-SPOTIFY_REDIRECT_URI = 'http://localhost:8080/callback'
+SPOTIFY_REDIRECT_URI = 'http://localhost:8080/callback'  # Ensure this is the same URI in Spotify dashboard
 
 # Define a unique cache path based on the device name
 device_cache_path = f".cache-{platform.node()}"  # Unique cache for each device
 
-# Clear the existing cache file to force re-authentication
-if os.path.exists(device_cache_path):
-    os.remove(device_cache_path)
-
-# Non-interactive authentication (Client Credentials Flow)
-client_credentials_manager = spotipy.oauth2.SpotifyClientCredentials(
+# Set up Spotify authentication manager
+sp_oauth = SpotifyOAuth(
     client_id=SPOTIFY_CLIENT_ID,
-    client_secret=SPOTIFY_CLIENT_SECRET
+    client_secret=SPOTIFY_CLIENT_SECRET,
+    redirect_uri=SPOTIFY_REDIRECT_URI,
+    scope="playlist-read-private user-library-read",
+    cache_path=device_cache_path
 )
 
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+sp = spotipy.Spotify(auth_manager=sp_oauth)
 
 
 # Function to get Spotify playlists for the authenticated user
