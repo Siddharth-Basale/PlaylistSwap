@@ -15,6 +15,14 @@ youtube_playlist_id = None
 def home():
     return render_template("home.html")
 
+@app.route('/callback')
+def callback():
+    token_info = sp_oauth.get_access_token(request.args['code'])
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+    # Now you can call sp.current_user_playlists() and other Spotify API methods
+    return redirect('/spotify_playlists')
+
+
 
 @app.route("/spotify_playlists", methods=["GET", "POST"])
 def spotify_playlists():
