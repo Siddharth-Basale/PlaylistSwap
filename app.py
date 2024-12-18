@@ -23,9 +23,12 @@ def callback():
     return redirect('/spotify_playlists')
 
 
-
 @app.route("/spotify_playlists", methods=["GET", "POST"])
 def spotify_playlists():
+    # Check if user is logged in, if not redirect to Spotify login
+    if 'token_info' not in session:
+        return redirect('/spotify_playlists')
+
     playlist_mapping = Spotify.get_spotify_playlists()
 
     if request.method == "POST":
