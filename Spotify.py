@@ -2,11 +2,12 @@ import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import platform
+from flask import redirect, request, session, url_for
 
 # Spotify API credentials
 SPOTIFY_CLIENT_ID = '770c44471ebe4c33828d0386301a5d70'
 SPOTIFY_CLIENT_SECRET = '1e75e0fed7a643cfadd422c4960bdc75'
-SPOTIFY_REDIRECT_URI = 'https://playlistswap-1.onrender.com'  # Ensure this is the same URI in Spotify dashboard
+SPOTIFY_REDIRECT_URI = 'https://playlistswap-1.onrender.com/callback'  # Ensure this is the same URI in Spotify dashboard
 
 # Define a unique cache path based on the device name
 device_cache_path = f".cache-{platform.node()}"  # Unique cache for each device
@@ -50,12 +51,29 @@ def get_playlist_name(playlist_id):
     return playlist['name']
 
 
-if __name__ == "__main__":
-    # Ensure user is logged in and playlists are fetched
-    print("Authenticating Spotify...")
-    playlists = get_spotify_playlists()
-    print("Available Playlists:")
-    for idx, playlist in playlists.items():
-        print(f"{idx}: {playlist['name']}")
+# Flask routes to handle authentication
+from flask import Flask, redirect, request, session
 
-    # Further code to handle playlist selection, etc.
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # For session handling, replace with a strong key
+
+@app.route('/spotify_playlists')
+def spotify_playlists():
+    auth_url = sp_oauth.get_authorize_url()
+    return redirect(auth_url)
+
+@app.route('/callback')
+def callback():
+    # This route will be hit when Spotify redirects back
+    token_info = sp_oauth.get_access_token(request.args['code'])
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+
+    # Store the access token in the session for future use
+    session['token_info'] = token_info
+
+    # Now you can use 'sp' to interact with Spotify API
+    playlists = get_spotify_playlists()
+    return render_template('playlists.html', playlists=playlists)
+
+if __name__ == "__main__":
+    app.run(debug=True)
