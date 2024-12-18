@@ -6,7 +6,7 @@ import platform
 # Spotify API credentials
 SPOTIFY_CLIENT_ID = '770c44471ebe4c33828d0386301a5d70'
 SPOTIFY_CLIENT_SECRET = '1e75e0fed7a643cfadd422c4960bdc75'
-SPOTIFY_REDIRECT_URI = 'http://localhost:8080/callback'
+SPOTIFY_REDIRECT_URI = 'https://playlistswap-1.onrender.com'
 
 # Define a unique cache path based on the device name
 device_cache_path = f".cache-{platform.node()}"  # Unique cache for each device
